@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>급제동 탐지 | CAN 주행 로그 분석</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header class="top">
+    <div class="wrap">
+      <p class="eyebrow">CAN 주행 로그 분석</p>
+      <h1>이 주행에 급제동이 있었나요?</h1>
+      <p class="lead">차량 센서 기록(CAN) 파일을 올리면, 직접 학습한 머신러닝 모델이 급감속·급정지가 있었을 확률을 알려줍니다.</p>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="card" aria-labelledby="how-title">
+      <h2 id="how-title">사용 방법</h2>
+      <ol class="steps">
+        <li><strong>파일 고르기</strong> 예시 주행을 누르거나, 내 CAN JSON 파일을 올립니다.</li>
+        <li><strong>분석 기다리기</strong> 서버가 속도와 브레이크 기록에서 제동 세기를 계산합니다. 보통 몇 초 걸립니다.</li>
+        <li><strong>결과 보기</strong> 급제동 확률과 함께, 가장 세게 감속한 순간을 그래프에서 확인합니다.</li>
+      </ol>
+    </section>
+
+    <section class="card" aria-labelledby="input-title">
+      <h2 id="input-title">주행 기록 선택</h2>
+
+      <h3>예시 주행으로 해보기</h3>
+      <p class="hint">실제 주행이 아니라 같은 파일 형식으로 직접 만든 합성 예시입니다.</p>
+      <div id="samples" class="samples"></div>
+
+      <h3>내 파일 올리기</h3>
+      <label id="drop" class="drop" for="file">
+        <input id="file" type="file" accept=".json,application/json">
+        <span class="drop-main">여기를 눌러 파일을 고르거나 끌어다 놓으세요</span>
+        <span class="drop-sub">AI Hub 「사고위험 환경에서의 운전습관 데이터」의 CAN JSON 형식, 60MB 이하</span>
+      </label>
+
+      <p id="status" class="status" role="status" aria-live="polite"></p>
+      <p id="error" class="error" role="alert" hidden></p>
+    </section>
+
+    <section id="result" class="card result" aria-labelledby="result-title" hidden>
+      <h2 id="result-title">분석 결과</h2>
+      <p id="result-source" class="hint"></p>
+
+      <div class="verdict">
+        <div class="prob">
+          <span id="prob-value" class="prob-value">–</span>
+          <span class="prob-label">급제동 확률</span>
+        </div>
+        <div class="verdict-text">
+          <p id="verdict-title" class="verdict-title"></p>
+          <p id="verdict-desc" class="verdict-desc"></p>
+          <div class="bar" aria-hidden="true"><div id="bar-fill" class="bar-fill"></div><div class="bar-mark"></div></div>
+          <p class="bar-caption">확률이 50% 이상이면 급제동으로 판정합니다.</p>
+        </div>
+      </div>
+
+      <dl class="stats">
+        <div><dt>주행 길이</dt><dd id="st-duration">–</dd></div>
+        <div><dt>최고 속도</dt><dd id="st-speed">–</dd></div>
+        <div><dt>가장 센 감속 (1초)</dt><dd id="st-decel">–</dd></div>
+        <div><dt>최대 브레이크 압력</dt><dd id="st-pressure">–</dd></div>
+      </dl>
+
+      <h3>속도와 브레이크</h3>
+      <canvas id="chart" width="920" height="320" role="img" aria-label="시간에 따른 속도와 브레이크 압력 그래프"></canvas>
+      <p class="legend">
+        <span class="key key-speed"></span>속도 (km/h)
+        <span class="key key-pressure"></span>브레이크 압력
+        <span class="key key-peak"></span>가장 세게 감속한 순간
+      </p>
+      <p id="quality" class="hint"></p>
+    </section>
+
+    <section class="card" aria-labelledby="model-title">
+      <h2 id="model-title">이 모델에 대해</h2>
+      <dl id="model-info" class="stats"></dl>
+      <ul class="notes">
+        <li>2분 안팎의 주행 클립 하나에 급감속 또는 급정지가 있었는지를 판정합니다. 사고 확률을 예측하는 모델이 아닙니다.</li>
+        <li>테스트 도로에서 수집한 클립 323개로 학습하고 평가했습니다. 실제 도로 주행에서의 정확도는 검증되지 않았습니다.</li>
+        <li>급정지는 급감속보다 잘 놓치는 편입니다.</li>
+      </ul>
+      <p class="hint">학습 데이터: AI Hub 「사고위험 환경에서의 운전습관 데이터」(2024). 원본 데이터는 이 서비스에 포함되어 있지 않습니다.</p>
+    </section>
+  </main>
+
+  <footer class="wrap foot">머신러닝 프로그래밍 기말 프로젝트</footer>
+  <script src="/static/app.js"></script>
+</body>
+</html>

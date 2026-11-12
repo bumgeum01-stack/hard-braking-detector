@@ -1,0 +1,47 @@
+{
+  "model_name": "Random Forest",
+  "target": "hard braking (급감속 or 급정지) within a 2-minute clip",
+  "features": [
+    "acc_min",
+    "acc2s_min",
+    "acc_p05",
+    "jerk_min",
+    "hard_decel_sec",
+    "dec_06s_min",
+    "dec_1s_min",
+    "bp_max",
+    "bp_p95",
+    "bp_rise_02s",
+    "bp_rise_06s",
+    "bp_sec_over100",
+    "bp_sec_over150",
+    "bp_top3s_mean",
+    "ep_speed_drop",
+    "ep_mean_decel",
+    "ep_pressure_peak",
+    "ep_speed_at_onset",
+    "rpm_drop_max"
+  ],
+  "threshold": 0.5,
+  "seed": 42,
+  "sklearn_version": "1.6.1",
+  "n_train": 192,
+  "n_val": 65,
+  "n_test": 66,
+  "fitted_on": "train+val",
+  "dev_cv_metrics": {
+    "cv_f1": 0.815,
+    "cv_precision": 0.862,
+    "cv_recall": 0.773,
+    "cv_roc_auc": 0.915
+  },
+  "test_metrics": {
+    "accuracy": 0.955,
+    "precision": 0.955,
+    "recall": 0.913,
+    "f1": 0.933,
+    "roc_auc": 0.987,
+    "log_loss": 0.233
+  },
+  "trained_at": "2026-11-11 07:48:56"
+}

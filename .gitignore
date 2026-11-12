@@ -1,0 +1,13 @@
+.venv/
+__pycache__/
+*.pyc
+.DS_Store
+.ipynb_checkpoints/
+.env
+# AI Hub 원본 데이터와 그 데이터에서 만든 표는 올리지 않는다
+data/
+*.zip
+labels.csv
+features_*.csv
+split.csv
+real_road_predictions.csv
