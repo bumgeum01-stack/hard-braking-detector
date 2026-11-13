@@ -1,0 +1,4 @@
+﻿,cv_f1,cv_precision,cv_recall,cv_roc_auc
+Logistic Regression (baseline),0.777,0.802,0.753,0.916
+Random Forest,0.815,0.862,0.773,0.915
+Gradient Boosting,0.802,0.833,0.773,0.91

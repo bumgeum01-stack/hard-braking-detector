@@ -1,0 +1,120 @@
+=== 학습 로그 (2026-11-13 00:10:39) ===
+scikit-learn 1.6.1 | seed 42 | features 19
+train 192 / val 65 / test 66
+
+[Baseline] Logistic Regression
+  C=0.01  fit 0.11s | train f1=0.769 | val accuracy=0.877 precision=0.947 recall=0.720 f1=0.818 roc_auc=0.932 log_loss=0.391
+  C=0.1   fit 0.05s | train f1=0.791 | val accuracy=0.862 precision=0.900 recall=0.720 f1=0.800 roc_auc=0.959 log_loss=0.303
+  C=1.0   fit 0.05s | train f1=0.785 | val accuracy=0.892 precision=0.875 recall=0.840 f1=0.857 roc_auc=0.978 log_loss=0.242
+  C=10.0  fit 0.05s | train f1=0.803 | val accuracy=0.908 precision=0.913 recall=0.840 f1=0.875 roc_auc=0.967 log_loss=0.238
+  -> 선택: C=10.0 (val f1=0.875)
+
+[Proposed 1] Random Forest (n_estimators=300)
+  max_depth=3    leaf=1 fit 0.90s | train f1=0.842 | val accuracy=0.908 precision=0.952 recall=0.800 f1=0.870 roc_auc=0.960 log_loss=0.275
+  max_depth=3    leaf=3 fit 0.89s | train f1=0.827 | val accuracy=0.908 precision=0.952 recall=0.800 f1=0.870 roc_auc=0.959 log_loss=0.271
+  max_depth=5    leaf=1 fit 0.90s | train f1=0.926 | val accuracy=0.923 precision=0.955 recall=0.840 f1=0.894 roc_auc=0.978 log_loss=0.244
+  max_depth=5    leaf=3 fit 0.89s | train f1=0.900 | val accuracy=0.923 precision=0.955 recall=0.840 f1=0.894 roc_auc=0.985 log_loss=0.235
+  max_depth=None leaf=1 fit 0.92s | train f1=1.000 | val accuracy=0.908 precision=0.913 recall=0.840 f1=0.875 roc_auc=0.984 log_loss=0.239
+  max_depth=None leaf=3 fit 0.91s | train f1=0.923 | val accuracy=0.923 precision=0.955 recall=0.840 f1=0.894 roc_auc=0.988 log_loss=0.233
+  -> 선택: max_depth=None, min_samples_leaf=3 (val f1=0.894)
+
+[Proposed 2] Gradient Boosting (max 300 trees, subsample=0.8)
+  lr=0.03 depth=2 fit 1.84s | best_n=300 val_logloss=0.1852
+      iter   1: train_loss=0.6448 val_loss=0.6467
+      iter  10: train_loss=0.5270 val_loss=0.5205
+      iter  25: train_loss=0.4161 val_loss=0.4189
+      iter  50: train_loss=0.3178 val_loss=0.3182
+      iter 100: train_loss=0.2235 val_loss=0.2440
+      iter 200: train_loss=0.1402 val_loss=0.2097
+      iter 300: train_loss=0.0972 val_loss=0.1852
+  lr=0.03 depth=3 fit 2.10s | best_n=297 val_logloss=0.1651
+      iter   1: train_loss=0.6406 val_loss=0.6469
+      iter  10: train_loss=0.5049 val_loss=0.5093
+      iter  25: train_loss=0.3695 val_loss=0.3972
+      iter  50: train_loss=0.2476 val_loss=0.3046
+      iter 100: train_loss=0.1412 val_loss=0.2351
+      iter 200: train_loss=0.0671 val_loss=0.1932
+      iter 300: train_loss=0.0368 val_loss=0.1656
+  lr=0.1  depth=2 fit 1.68s | best_n=300 val_logloss=0.1622
+      iter   1: train_loss=0.6076 val_loss=0.6029
+      iter  10: train_loss=0.3721 val_loss=0.3672
+      iter  25: train_loss=0.2495 val_loss=0.2613
+      iter  50: train_loss=0.1532 val_loss=0.2126
+      iter 100: train_loss=0.0814 val_loss=0.1893
+      iter 200: train_loss=0.0272 val_loss=0.1746
+      iter 300: train_loss=0.0104 val_loss=0.1622
+  lr=0.1  depth=3 fit 1.53s | best_n=107 val_logloss=0.1742
+      iter   1: train_loss=0.5944 val_loss=0.6041
+      iter  10: train_loss=0.3228 val_loss=0.3507
+      iter  25: train_loss=0.1724 val_loss=0.2495
+      iter  50: train_loss=0.0815 val_loss=0.1978
+      iter 100: train_loss=0.0282 val_loss=0.1792
+      iter 200: train_loss=0.0044 val_loss=0.1930
+      iter 300: train_loss=0.0006 val_loss=0.1874
+  -> 선택: lr=0.1, depth=2, n_estimators=300 | val accuracy=0.923 precision=0.917 recall=0.880 f1=0.898 roc_auc=0.984 log_loss=0.162
+
+[Validation 성능] (Train으로 학습, Validation 클립 65개)
+                                accuracy  precision  recall     f1  roc_auc  log_loss
+Logistic Regression (baseline)     0.908      0.913    0.84  0.875    0.967     0.238
+Random Forest                      0.923      0.955    0.84  0.894    0.988     0.233
+Gradient Boosting                  0.923      0.917    0.88  0.898    0.984     0.162
+
+[개발 세트 교차검증] 클립 257개, 운전자 11명, Leave-One-Driver-Out
+                                cv_f1  cv_precision  cv_recall  cv_roc_auc
+Logistic Regression (baseline)  0.777         0.802      0.753       0.916
+Random Forest                   0.815         0.862      0.773       0.915
+Gradient Boosting               0.802         0.833      0.773       0.910
+
+최종 모델(개발 세트 교차검증 F1 기준): Random Forest
+  refit on train+val (257 clips) | Logistic Regression (baseline)   0.02s | train f1=0.839
+  refit on train+val (257 clips) | Random Forest                    0.75s | train f1=0.938
+  refit on train+val (257 clips) | Gradient Boosting                0.63s | train f1=1.000
+
+[Test 성능]  (Test 클립 66개, 급제동 23개)
+                                accuracy  precision  recall     f1  roc_auc  log_loss
+Logistic Regression (baseline)     0.939      0.913   0.913  0.913    0.984     0.174
+Random Forest                      0.955      0.955   0.913  0.933    0.987     0.233
+Gradient Boosting                  0.955      0.955   0.913  0.933    0.968     0.201
+
+최종 모델: Random Forest
+  Test F1 = 0.933 | 목표 0.80 달성
+  베이스라인 대비 F1 차이 = +0.020
+confusion matrix [Logistic Regression (baseline)]: TN=41 FP=2 FN=2 TP=21
+confusion matrix [Random Forest]: TN=42 FP=1 FN=2 TP=21
+confusion matrix [Gradient Boosting]: TN=42 FP=1 FN=2 TP=21
+
+[순열 중요도 상위 8개] (Random Forest, test)
+dec_1s_min        0.136
+acc_min           0.002
+acc2s_min         0.000
+acc_p05           0.000
+hard_decel_sec    0.000
+bp_p95            0.000
+bp_max            0.000
+bp_rise_02s       0.000
+
+[오류 사례] Random Forest: Test 66개 중 3개 오류 (FN 2, FP 1)
+        driver_id     section event  label   prob  pred type  acc_min  dec_06s_min  bp_max  bp_sec_over100
+clip_id                                                                                                   
+02885      000017  차대사람및차대자전거   급정지      1  0.226     0   FN    -2.58        -3.21    14.0             0.0
+02811      000025  차대사람및차대자전거   급감속      1  0.463     0   FN    -2.73        -4.63   206.0             2.2
+03067      000025    차대차및차량단독    일반      0  0.582     1   FP    -3.59        -5.32    24.0             0.0
+
+[거동 종류별 Test 정답률]
+        mean  size
+event             
+급감속    0.955    22
+급정지    0.000     1
+급출발    1.000     1
+일반     0.976    42
+
+모델 저장 완료: hard_braking_model.joblib / model_meta.json
+  real-road | Logistic Regression (baseline)   급제동으로 탐지  209개 (9.0%) | 확률 중앙값 0.025
+  real-road | Random Forest                    급제동으로 탐지   42개 (1.8%) | 확률 중앙값 0.116
+  real-road | Gradient Boosting                급제동으로 탐지  124개 (5.4%) | 확률 중앙값 0.008
+
+[지름길 학습 확인]
+  비교용(급거동 전체 + 맥락 값): Test F1=0.898 | 실제 도로 탐지 비율 61.8%
+  최종 모델(급제동 + 제동 특징) : Test F1=0.933 | 실제 도로 탐지 비율 1.8%
+  비교용 모델의 중요 특징 상위 5개: ctx_launch_dv3_max(0.29), dec_06s_min(0.17), dec_1s_min(0.13), jerk_min(0.09), bp_p95(0.06)
+  비교용 모델이 탐지한 실제 도로 클립의 1초 최대 감속 중앙값: -1.74 m/s^2 (테스트 도로 급제동 클립은 -4.28)
